@@ -3,6 +3,9 @@ package xr.weweather.bean;
 //天气信息
 
 public class WeatherBean {
+
+    public String location;
+
     public String weather;
 
     public String temperature;
@@ -33,6 +36,13 @@ public class WeatherBean {
         this.temperature = temperature;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }
 
 

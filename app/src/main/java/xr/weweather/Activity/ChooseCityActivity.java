@@ -84,8 +84,9 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
         else if (currentLevel == FixedConstants.LEVEL_COUNTY) {
             //得到选取地区名称
             final String cityInfo = countyList.get(position).getCountyName();
+            final String weatherId = countyList.get(position).getWeatherCode();
             //得到地区天气代码，并封装成url
-            final String weather_url = "http://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=" + countyList.get(position).getWeatherCode();
+            final String weather_url = "https://api.heweather.com/x3/weather?cityid=CN" + weatherId + "&key=573a3ba3c95a43ad94e70c34610720f9";
             getWeatherDialog = new ProgressDialog(thisContext);
             getWeatherDialog.setTitle("提示");
             getWeatherDialog.setMessage("正在卖力刷新天气数据,请稍等...");
@@ -105,8 +106,7 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
                         //将数据取出，并发送给主线程
                         WeatherBean weatherInfo = weatherInfoList.get(0);
                         Message msg = Message.obtain();
-                        //msg.obj = cityInfo + " - " + weatherInfo.getWeather() + " - " + weatherInfo.getTemperature() + "℃";
-                        msg.obj = weatherInfo.getWeather();
+                        msg.obj = cityInfo + "##" + weatherInfo.getWeather() + "##" + weatherInfo.getTemperature() + "##" + weatherInfo.getTime();
                         handler.sendMessage(msg);
                     } else {
                         //没有的话，弹窗提示
@@ -119,7 +119,6 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
                     }
                 }
             }).start();
-
         }
     }
 
@@ -128,6 +127,7 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
         @Override
         public void handleMessage(Message msg) {
             String weatherInfo = (String) msg.obj;
+            //Toast.makeText(thisContext, weatherInfo, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.putExtra("WEATHER_INFO", weatherInfo);
             setResult(RESULT_OK, intent);

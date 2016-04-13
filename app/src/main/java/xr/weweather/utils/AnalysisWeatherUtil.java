@@ -3,6 +3,7 @@ package xr.weweather.utils;
 
 import android.content.Context;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -34,11 +35,18 @@ public class AnalysisWeatherUtil {
 
                 //解析JSON数据
                 JSONObject weatherRoot = new JSONObject(weatherInfoString);
-                JSONObject realTimeWeather = weatherRoot.getJSONObject("realtime");
+                JSONArray weatherArray = weatherRoot.getJSONArray("HeWeather data service 3.0");
+                JSONObject hefentWeather = weatherArray.getJSONObject(0);
+                JSONObject basicWeather = hefentWeather.getJSONObject("basic");
+                JSONObject updateWeather = basicWeather.getJSONObject("update");
+                String currentTime = updateWeather.getString("loc");
 
-                String currentTemp = realTimeWeather.getString("temp");
-                String currentWeather = realTimeWeather.getString("weather");
-                String currentTime = realTimeWeather.getString("time");
+                JSONObject nowWeather = hefentWeather.getJSONObject("now");
+                String currentTemp = nowWeather.getString("tmp");
+
+                JSONObject condWeather = nowWeather.getJSONObject("cond");
+                String currentWeather = condWeather.getString("txt");
+
 
                 //并封装到天气Bean中
                 WeatherBean realtimeWeather = new WeatherBean();

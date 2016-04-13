@@ -15,10 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import xr.weweather.R;
 import xr.weweather.bean.FixedConstants;
+import xr.weweather.bean.WeatherBean;
 import xr.weweather.db.CityListDatabase;
 import xr.weweather.utils.AnalysisCityListUtil;
+import xr.weweather.utils.SplitWeatherStringUtil;
 
 public class WeatherActivity extends Activity implements View.OnClickListener {
 
@@ -27,7 +31,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private Context thisContext = WeatherActivity.this;
     //定义解析结束标记
     private int analysisEnd = 0;
-    private TextView cityNameText, tempText;
+    private TextView cityNameText, tempText, timeText;
     private ProgressDialog getCityListDialog;
 
     @Override
@@ -49,6 +53,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         locationButton = (ImageButton) findViewById(R.id.location_button);
         flushButton = (ImageButton) findViewById(R.id.flush_button);
         cityNameText = (TextView) findViewById(R.id.cityName_text);
+        timeText = (TextView) findViewById(R.id.time_text);
         tempText = (TextView) findViewById(R.id.temp_text);
     }
 
@@ -62,8 +67,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                     //数据库已经存在，则直接跳转
                     Intent intent = new Intent();
                     intent.setClass(thisContext, ChooseCityActivity.class);
-                    thisContext.startActivity(intent);
-                    finish();
+                    startActivityForResult(intent, 1);
                 } else {
                     getCityListDialog = new ProgressDialog(thisContext);
                     getCityListDialog.setTitle("初始化");
@@ -121,24 +125,68 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
-                    final String weatherInfo = data.getStringExtra("WEATHER_INFO");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (weatherInfo.equals("晴")) {
-                                weatherImage.setImageResource(R.drawable.weather_sun);
-                            } else if (weatherInfo.equals("阴")) {
-                                weatherImage.setImageResource(R.drawable.weather_overcast);
-                            } else if (weatherInfo.equals("多云")) {
-                                weatherImage.setImageResource(R.drawable.weather_cloudy);
-                            } else
-                                Toast.makeText(thisContext, weatherInfo, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    String weatherInfo = data.getStringExtra("WEATHER_INFO");
+                    ArrayList<WeatherBean> nowWeatherList = SplitWeatherStringUtil.splitWeatherInfo(weatherInfo);
+                    WeatherBean nowWeather = nowWeatherList.get(0);
+                    updateWeatherUI(nowWeather);
                 }
                 break;
             default:
-                break;
+        }
+    }
+
+    private void updateWeatherUI(WeatherBean nowWeather) {
+        cityNameText.setText(nowWeather.getLocation());
+        tempText.setText(nowWeather.getWeather() + "  |  " + nowWeather.getTemperature() + "℃");
+        timeText.setText(nowWeather.getTime());
+
+        if ((nowWeather.getWeather()).equals("晴")) {
+            weatherImage.setImageResource(R.drawable.weather_sun);
+        } else if ((nowWeather.getWeather()).equals("多云") || (nowWeather.getWeather()).equals("少云")) {
+            weatherImage.setImageResource(R.drawable.weather_cloudy);
+        } else if ((nowWeather.getWeather()).equals("晴间多云")) {
+            weatherImage.setImageResource(R.drawable.weather_suntocloudy);
+        } else if ((nowWeather.getWeather()).equals("阴")) {
+            weatherImage.setImageResource(R.drawable.weather_overcast);
+        } else if ((nowWeather.getWeather()).equals("阵雨")) {
+            weatherImage.setImageResource(R.drawable.weather_showerrain);
+        } else if ((nowWeather.getWeather()).equals("强阵雨")) {
+            weatherImage.setImageResource(R.drawable.weather_heavyshower);
+        } else if ((nowWeather.getWeather()).equals("雷阵雨")) {
+            weatherImage.setImageResource(R.drawable.weather_thundershower);
+        } else if ((nowWeather.getWeather()).equals("强雷阵雨")) {
+            weatherImage.setImageResource(R.drawable.weather_thunderstorm);
+        } else if ((nowWeather.getWeather()).equals("冰雹")) {
+            weatherImage.setImageResource(R.drawable.weather_hail);
+        } else if ((nowWeather.getWeather()).equals("小雨") || (nowWeather.getWeather()).equals("毛毛雨/细雨")) {
+            weatherImage.setImageResource(R.drawable.weather_lightrain);
+        } else if ((nowWeather.getWeather()).equals("中雨")) {
+            weatherImage.setImageResource(R.drawable.weather_moderaterain);
+        } else if ((nowWeather.getWeather()).equals("大雨") || (nowWeather.getWeather()).equals("极端降雨")) {
+            weatherImage.setImageResource(R.drawable.weather_heavyrain);
+        } else if ((nowWeather.getWeather()).equals("暴雨")) {
+            weatherImage.setImageResource(R.drawable.weather_storm);
+        } else if ((nowWeather.getWeather()).equals("大暴雨")) {
+            weatherImage.setImageResource(R.drawable.weather_heavystorm);
+        } else if ((nowWeather.getWeather()).equals("冻雨")) {
+            weatherImage.setImageResource(R.drawable.weather_freezingrain);
+        } else if ((nowWeather.getWeather()).equals("小雪")) {
+            weatherImage.setImageResource(R.drawable.weather_lightsnow);
+        } else if ((nowWeather.getWeather()).equals("中雪")) {
+            weatherImage.setImageResource(R.drawable.weather_moderatesnow);
+        } else if ((nowWeather.getWeather()).equals("大雪")) {
+            weatherImage.setImageResource(R.drawable.weather_heavysnow);
+        } else if ((nowWeather.getWeather()).equals("暴雪")) {
+            weatherImage.setImageResource(R.drawable.weather_snowstorm);
+        } else if ((nowWeather.getWeather()).equals("雨夹雪")) {
+            weatherImage.setImageResource(R.drawable.weather_sleet);
+        } else if ((nowWeather.getWeather()).equals("阵雨夹雪")) {
+            weatherImage.setImageResource(R.drawable.weather_showersnow);
+        } else if ((nowWeather.getWeather()).equals("阵雪")) {
+            weatherImage.setImageResource(R.drawable.weather_snowflurry);
+        } else {
+            weatherImage.setImageResource(R.drawable.weather_unknow);
+            Toast.makeText(thisContext, nowWeather.getWeather() + " - 暂无天气图标", Toast.LENGTH_LONG).show();
         }
     }
 
