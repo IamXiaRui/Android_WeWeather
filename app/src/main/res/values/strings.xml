@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WeWeather</string>
+    <string name="defult_city_name">未知</string>
+    <string name="defult_temp">0°</string>
+    <string name="defult_time">00:00</string>
+
+</resources>

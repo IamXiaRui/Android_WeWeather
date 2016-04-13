@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/weather_back"
+    android:orientation="vertical"
+    android:paddingTop="30dp"
+    tools:context=".Activity.WeatherActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/head_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/location_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:background="#00ffffff"
+            android:scaleType="centerCrop"
+            android:src="@drawable/weather_location" />
+
+        <TextView
+            android:id="@+id/cityName_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="@string/defult_city_name"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp" />
+
+        <ImageButton
+            android:id="@+id/flush_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="#00ffffff"
+            android:scaleType="centerCrop"
+            android:src="@drawable/weather_flush" />
+
+    </RelativeLayout>
+
+    <!-- 水平分界线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:background="#FFFFFF" />
+
+
+    <!-- 天气部分-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 天气-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/relativeLayout">
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/weather_image"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:background="#00ffffff"
+            android:scaleType="center"
+            android:src="@drawable/weather_none"
+            android:layout_marginTop="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+
+        <TextView
+            android:id="@+id/temp_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/defult_temp"
+            android:textColor="#FFFFFF"
+            android:textSize="50sp"
+            android:layout_below="@+id/weather_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp" />
+
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/defult_time"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>
