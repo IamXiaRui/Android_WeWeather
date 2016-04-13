@@ -84,42 +84,46 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
         else if (currentLevel == FixedConstants.LEVEL_COUNTY) {
             //得到选取地区名称
             final String cityInfo = countyList.get(position).getCountyName();
-            final String weatherId = countyList.get(position).getWeatherCode();
+            final String weatherCode = countyList.get(position).getWeatherCode();
             //得到地区天气代码，并封装成url
-            final String weather_url = "https://api.heweather.com/x3/weather?cityid=CN" + weatherId + "&key=573a3ba3c95a43ad94e70c34610720f9";
+            final String weather_url = "https://api.heweather.com/x3/weather?cityid=CN" + weatherCode + "&key=573a3ba3c95a43ad94e70c34610720f9";
             getWeatherDialog = new ProgressDialog(thisContext);
             getWeatherDialog.setTitle("提示");
             getWeatherDialog.setMessage("正在卖力刷新天气数据,请稍等...");
             getWeatherDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             getWeatherDialog.setCancelable(true);
             getWeatherDialog.show();
+            getWeatherThread(cityInfo, weatherCode, weather_url);
 
-            //开启线程解析JSON数据
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    //得到解析工具类返回的工具类
-                    ArrayList<WeatherBean> weatherInfoList = AnalysisWeatherUtil.getWeatherForJson(thisContext, weather_url);
-                    //如果返回集合中有数据
-                    if (weatherInfoList.size() > 0) {
-                        getWeatherDialog.dismiss();
-                        //将数据取出，并发送给主线程
-                        WeatherBean weatherInfo = weatherInfoList.get(0);
-                        Message msg = Message.obtain();
-                        msg.obj = cityInfo + "##" + weatherInfo.getWeather() + "##" + weatherInfo.getTemperature() + "##" + weatherInfo.getTime();
-                        handler.sendMessage(msg);
-                    } else {
-                        //没有的话，弹窗提示
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(thisContext, "获取天气数据失败", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }
-            }).start();
         }
+    }
+
+    public void getWeatherThread(final String cityInfo, final String weatherCode, final String weather_url) {
+        //开启线程解析JSON数据
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //得到解析工具类返回的工具类
+                ArrayList<WeatherBean> weatherInfoList = AnalysisWeatherUtil.getWeatherForJson(thisContext, weather_url);
+                //如果返回集合中有数据
+                if (weatherInfoList.size() > 0) {
+                    getWeatherDialog.dismiss();
+                    //将数据取出，并发送给主线程
+                    WeatherBean weatherInfo = weatherInfoList.get(0);
+                    Message msg = Message.obtain();
+                    msg.obj = cityInfo + "##" + weatherCode + "##" + weatherInfo.getWeather() + "##" + weatherInfo.getTemperature() + "##" + weatherInfo.getTime();
+                    handler.sendMessage(msg);
+                } else {
+                    //没有的话，弹窗提示
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(thisContext, "获取天气数据失败", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     //接收子线程发送的数据

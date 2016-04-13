@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import xr.weweather.R;
 import xr.weweather.bean.FixedConstants;
 import xr.weweather.bean.WeatherBean;
-import xr.weweather.db.CityListDatabase;
+import xr.weweather.db.WeatherDatabase;
 import xr.weweather.utils.AnalysisCityListUtil;
 import xr.weweather.utils.SplitWeatherStringUtil;
 import xr.weweather.utils.UpdateWeatherUtil;
@@ -33,6 +33,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private int analysisEnd = 0;
     private TextView cityNameText, tempText, timeText;
     private ProgressDialog getCityListDialog;
+    private WeatherDatabase weatherDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,20 +50,28 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //透明导航栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        weatherDB = new WeatherDatabase(thisContext);
         locationButton = (ImageButton) findViewById(R.id.location_button);
         flushButton = (ImageButton) findViewById(R.id.flush_button);
         cityNameText = (TextView) findViewById(R.id.cityName_text);
         weatherImage = (ImageView) findViewById(R.id.weather_image);
         timeText = (TextView) findViewById(R.id.time_text);
         tempText = (TextView) findViewById(R.id.temp_text);
+
+        if (weatherDB.DBIsExist()) {
+            ArrayList<WeatherBean> oldWeatherList = weatherDB.getOldWeather();
+            UpdateWeatherUtil.updateWeatherUI(thisContext, cityNameText, tempText, timeText, weatherImage, oldWeatherList.get(oldWeatherList.size()-1));
+        } else
+            Toast.makeText(thisContext, "请选择城市", Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.location_button:
                 //每次点击判断数据库是否存在
-                if ((new CityListDatabase(thisContext)).DBIsExist()) {
+                if (weatherDB.DBIsExist()) {
                     //数据库已经存在，则直接跳转
                     Intent intent = new Intent();
                     intent.setClass(thisContext, ChooseCityActivity.class);
@@ -89,7 +98,16 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case R.id.flush_button:
-                Toast.makeText(thisContext, "刷新功能暂未开放...", Toast.LENGTH_SHORT).show();
+                if (new WeatherDatabase(thisContext).DBIsExist()) {
+                    String currentCode = new WeatherDatabase(thisContext).getWeatherCode();
+                    if (!currentCode.equals("")) {
+
+                    } else
+                        Toast.makeText(thisContext, "刷新失败", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(thisContext, "请先选择城市", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             default:
                 break;
@@ -118,9 +136,8 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
             case 1:
                 if (resultCode == RESULT_OK) {
                     String weatherInfo = data.getStringExtra("WEATHER_INFO");
-                    ArrayList<WeatherBean> nowWeatherList = SplitWeatherStringUtil.splitWeatherInfo(weatherInfo);
-                    WeatherBean nowWeather = nowWeatherList.get(0);
-                    UpdateWeatherUtil.updateWeatherUI(thisContext,cityNameText,tempText,timeText,weatherImage,nowWeather);
+                    ArrayList<WeatherBean> nowWeatherList = SplitWeatherStringUtil.splitWeatherInfo(thisContext, weatherInfo);
+                    UpdateWeatherUtil.updateWeatherUI(thisContext, cityNameText, tempText, timeText, weatherImage, nowWeatherList.get(0));
                 }
                 break;
             default:

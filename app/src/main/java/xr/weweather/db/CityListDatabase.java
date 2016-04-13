@@ -131,17 +131,6 @@ public class CityListDatabase {
                 list.add(mCounty);
             } while (cursor.moveToNext());
         }
-//        if (cursor != null && cursor.getCount() > 0) {
-//            while (cursor.moveToNext()) {
-//                CountyBean mCounty = new CountyBean();
-//                mCounty.setId(cursor.getInt(0));
-//                mCounty.setCountyName(cursor.getString(1));
-//                mCounty.setCountyCode(cursor.getString(2));
-//                mCounty.setCityId(cityId);
-//                mCounty.setWeatherCode(cursor.getString(4));
-//                list.add(mCounty);
-//            }
-//        }
         return list;
     }
 

@@ -12,8 +12,18 @@ public class WeatherBean {
 
     public String time;
 
+    public String weatherCode;
+
     public String getTime() {
         return time;
+    }
+
+    public String getWeatherCode() {
+        return weatherCode;
+    }
+
+    public void setWeatherCode(String weatherCode) {
+        this.weatherCode = weatherCode;
     }
 
     public void setTime(String time) {
