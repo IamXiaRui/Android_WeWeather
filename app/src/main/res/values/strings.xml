@@ -3,5 +3,6 @@
     <string name="defult_city_name">未知</string>
     <string name="defult_temp">0°</string>
     <string name="defult_time">00:00</string>
+    <string name="support_info">和风天气提供数据支持</string>
 
 </resources>

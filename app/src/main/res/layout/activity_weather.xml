@@ -38,12 +38,12 @@
             android:gravity="center"
             android:text="@string/defult_city_name"
             android:textColor="#FFFFFF"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/flush_button"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
@@ -82,26 +82,27 @@
 
         <ImageView
             android:id="@+id/weather_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="#00ffffff"
-            android:scaleType="center"
-            android:src="@drawable/weather_none"
-            android:layout_marginTop="80dp"
+            android:src="@drawable/weather_unknow"
+            android:layout_marginTop="50dp"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            />
 
 
         <TextView
             android:id="@+id/temp_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="@string/defult_temp"
             android:textColor="#FFFFFF"
-            android:textSize="50sp"
-            android:layout_below="@+id/weather_image"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp" />
+            android:textSize="35sp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/relativeLayout" />
 
         <TextView
             android:id="@+id/time_text"
@@ -109,10 +110,24 @@
             android:layout_height="wrap_content"
             android:text="@string/defult_time"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:layout_marginBottom="50dp"
+            android:textSize="18sp"
+            android:layout_marginTop="60dp"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="60dp"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/support_info"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/textView" />
 
 
     </RelativeLayout>
