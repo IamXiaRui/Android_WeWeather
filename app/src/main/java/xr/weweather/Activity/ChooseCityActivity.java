@@ -210,4 +210,5 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
             finish();
         }
     }
+
 }

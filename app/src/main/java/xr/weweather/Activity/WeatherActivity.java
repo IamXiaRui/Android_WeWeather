@@ -21,6 +21,7 @@ import xr.weweather.bean.FixedConstants;
 import xr.weweather.bean.WeatherBean;
 import xr.weweather.db.WeatherDatabase;
 import xr.weweather.utils.AnalysisCityListUtil;
+import xr.weweather.utils.FlushWeatherUtil;
 import xr.weweather.utils.SplitWeatherStringUtil;
 import xr.weweather.utils.UpdateWeatherUtil;
 
@@ -32,7 +33,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     //定义解析结束标记
     private int analysisEnd = 0;
     private TextView cityNameText, tempText, timeText;
-    private ProgressDialog getCityListDialog;
+    private ProgressDialog getCityListDialog, flushWeatherDialog;
     private WeatherDatabase weatherDB;
 
     @Override
@@ -60,7 +61,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 
         if (weatherDB.DBIsExist()) {
             ArrayList<WeatherBean> oldWeatherList = weatherDB.getOldWeather();
-            UpdateWeatherUtil.updateWeatherUI(thisContext, cityNameText, tempText, timeText, weatherImage, oldWeatherList.get(oldWeatherList.size()-1));
+            UpdateWeatherUtil.updateWeatherUI(thisContext, cityNameText, tempText, timeText, weatherImage, oldWeatherList.get(oldWeatherList.size() - 1));
         } else
             Toast.makeText(thisContext, "请选择城市", Toast.LENGTH_SHORT).show();
     }
@@ -90,7 +91,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                         public void run() {
                             analysisEnd = AnalysisCityListUtil.XMLAnalysisUtil(thisContext, getCityListDialog);
                             Message msg = Message.obtain();
-                            msg.obj = analysisEnd;
+                            msg.arg1 = analysisEnd;
                             handler.sendMessage(msg);
                         }
                     }).start();
@@ -99,9 +100,17 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.flush_button:
                 if (new WeatherDatabase(thisContext).DBIsExist()) {
-                    String currentCode = new WeatherDatabase(thisContext).getWeatherCode();
+                    final String currentLocation = cityNameText.getText().toString().trim();
+                    final String currentCode = new WeatherDatabase(thisContext).getWeatherCode(currentLocation);
                     if (!currentCode.equals("")) {
-
+                        final String weather_url = "https://api.heweather.com/x3/weather?cityid=CN" + currentCode + "&key=573a3ba3c95a43ad94e70c34610720f9";
+                        flushWeatherDialog = new ProgressDialog(thisContext);
+                        flushWeatherDialog.setTitle("提示");
+                        flushWeatherDialog.setMessage("正在卖力刷新天气数据,请稍等...");
+                        flushWeatherDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        flushWeatherDialog.setCancelable(true);
+                        flushWeatherDialog.show();
+                        new FlushWeatherUtil().flushWeather(thisContext,flushWeatherDialog,handler,currentLocation,currentCode,weather_url);
                     } else
                         Toast.makeText(thisContext, "刷新失败", Toast.LENGTH_SHORT).show();
                 } else {
@@ -118,7 +127,12 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            analysisEnd = (int) msg.obj;
+
+            String weatherInfo = (String)msg.obj;
+            ArrayList<WeatherBean> nowWeatherList = SplitWeatherStringUtil.splitWeatherInfo(thisContext, weatherInfo);
+            UpdateWeatherUtil.updateWeatherUI(thisContext, cityNameText, tempText, timeText, weatherImage, nowWeatherList.get(0));
+
+            analysisEnd = (int) msg.arg1;
             //如果解析结束标记等于固定常量，表示解析结束
             if (analysisEnd == FixedConstants.XML_END) {
                 Intent intent = new Intent();

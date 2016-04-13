@@ -67,11 +67,13 @@ public class WeatherDatabase {
 
 
     //查询当前天气数据库中地区的天气代码
-    public String getWeatherCode() {
+    public String getWeatherCode(String countyName) {
         SQLiteDatabase db = weatherOpenHelper.getReadableDatabase();
-        Cursor cursor = db.query("weatherCache", null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            return cursor.getString(2);
+        Cursor cursor = db.query("weatherCache", null, "county_name=?", new String[]{countyName}, null, null, null);
+        if (cursor!=null && cursor.getCount()>0) {
+            while(cursor.moveToNext()) {
+                return cursor.getString(2);
+            }
         }
         return null;
     }
