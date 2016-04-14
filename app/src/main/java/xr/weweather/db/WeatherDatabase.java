@@ -65,6 +65,18 @@ public class WeatherDatabase {
         return list;
     }
 
+    //删除旧的数据库数据
+    public void delOldWeather(String name){
+
+        //执行sql语句需要sqliteDatabase对象
+        //调用getReadableDatabase方法,来初始化数据库的创建
+        SQLiteDatabase db = weatherOpenHelper.getReadableDatabase();
+        //sql:sql语句，  bindArgs：sql语句中占位符的值
+        db.execSQL("delete from weatherCache where county_name=?;", new Object[]{name});
+        //关闭数据库对象
+        db.close();
+
+    }
 
     //查询当前天气数据库中地区的天气代码
     public String getWeatherCode(String countyName) {
