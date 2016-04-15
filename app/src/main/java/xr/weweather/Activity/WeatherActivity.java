@@ -58,9 +58,10 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         timeText = (TextView) findViewById(R.id.time_text);
         tempText = (TextView) findViewById(R.id.temp_text);
 
+        //回显天气功能
 //        if (weatherDB.DBIsExist()) {
-//            ArrayList<WeatherBean> oldWeatherList = weatherDB.getOldWeather();
-//            UpdateWeatherUtil.updateWeatherUI(thisContext, cityNameText, tempText, timeText, weatherImage, oldWeatherList.get(oldWeatherList.size() - 1));
+        ArrayList<WeatherBean> oldWeatherList = weatherDB.getOldWeather();
+        UpdateWeatherUtil.updateWeatherUI(thisContext, cityNameText, tempText, timeText, weatherImage, oldWeatherList.get(oldWeatherList.size() - 1));
 //        } else
 //            Toast.makeText(thisContext, "请选择城市", Toast.LENGTH_SHORT).show();
     }
@@ -98,6 +99,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case R.id.flush_button:
+                //刷新天气功能
 //                if (weatherDB.DBIsExist()) {
 //                    final String currentLocation = cityNameText.getText().toString().trim();
 //                    final String currentCode = new WeatherDatabase(thisContext).getWeatherCode(currentLocation);
@@ -114,7 +116,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 //                    } else
 //                        Toast.makeText(thisContext, "刷新失败", Toast.LENGTH_SHORT).show();
 //                } else {
-                    Toast.makeText(thisContext, "请先选择城市", Toast.LENGTH_SHORT).show();
+                Toast.makeText(thisContext, "请先选择城市", Toast.LENGTH_SHORT).show();
 //                }
                 break;
             default:
@@ -126,6 +128,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+
 
 //            String weatherInfo = (String)msg.obj;
 //            ArrayList<WeatherBean> nowWeatherList = SplitWeatherStringUtil.splitWeatherInfo(thisContext, weatherInfo);
@@ -143,6 +146,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         }
     };
 
+    //获取城市列表解析天气返回值
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
