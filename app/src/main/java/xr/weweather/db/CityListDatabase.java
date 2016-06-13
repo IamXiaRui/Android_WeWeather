@@ -10,7 +10,7 @@ import java.util.List;
 
 import xr.weweather.bean.CityBean;
 import xr.weweather.bean.CountyBean;
-import xr.weweather.bean.FixedConstants;
+import xr.weweather.utils.FixedConstantsUtil;
 import xr.weweather.bean.ProvinceBean;
 
 /**
@@ -144,7 +144,7 @@ public class CityListDatabase {
                 count++;
             }
         }
-        if (count == FixedConstants.PROVINCE_COUNT) {
+        if (count == FixedConstantsUtil.PROVINCE_COUNT) {
             return true;
         } else
             return false;

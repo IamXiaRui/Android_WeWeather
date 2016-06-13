@@ -1,9 +1,9 @@
-package xr.weweather.bean;
+package xr.weweather.utils;
 
 /**
  * 固定常量
  */
-public class FixedConstants {
+public class FixedConstantsUtil {
 
     //解析结束标记
     public final static int XML_END = 1000;

@@ -8,7 +8,7 @@
         android:icon="@mipmap/weather_icon"
         android:label="@string/app_name">
         <activity
-            android:name=".Activity.WeatherActivity"
+            android:name=".activity.WeatherActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.ChooseCityActivity"
+            android:name=".activity.ChooseCityActivity"
             android:theme="@style/AppTheme"></activity>
     </application>
 

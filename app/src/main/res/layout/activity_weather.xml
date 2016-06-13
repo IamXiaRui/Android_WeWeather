@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/weather_back"
+    android:background="#63B8FF"
     android:orientation="vertical"
     android:paddingTop="30dp"
-    tools:context=".Activity.WeatherActivity">
+    tools:context=".activity.WeatherActivity">
 
 
     <RelativeLayout

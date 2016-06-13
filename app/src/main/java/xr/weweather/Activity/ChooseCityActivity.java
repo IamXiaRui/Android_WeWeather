@@ -1,4 +1,4 @@
-package xr.weweather.Activity;
+package xr.weweather.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,7 +19,7 @@ import java.util.List;
 import xr.weweather.R;
 import xr.weweather.bean.CityBean;
 import xr.weweather.bean.CountyBean;
-import xr.weweather.bean.FixedConstants;
+import xr.weweather.utils.FixedConstantsUtil;
 import xr.weweather.bean.ProvinceBean;
 import xr.weweather.bean.WeatherBean;
 import xr.weweather.db.CityListDatabase;
@@ -71,17 +71,17 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //如果点击的是省，得到当前省，并显示城市列表
-        if (currentLevel == FixedConstants.LEVEL_PROVINCE) {
+        if (currentLevel == FixedConstantsUtil.LEVEL_PROVINCE) {
             selectedProvince = provinceList.get(position);
             allCities();
         }
         //如果点击的是市，得到当前市，并显示县区列表
-        else if (currentLevel == FixedConstants.LEVEL_CITY) {
+        else if (currentLevel == FixedConstantsUtil.LEVEL_CITY) {
             selectedCity = cityList.get(position);
             allCounties();
         }
         //如果点击的是县区，直接拿到名称与天气ID，传给上一层Activity
-        else if (currentLevel == FixedConstants.LEVEL_COUNTY) {
+        else if (currentLevel == FixedConstantsUtil.LEVEL_COUNTY) {
             //得到选取地区名称
             final String cityInfo = countyList.get(position).getCountyName();
             final String weatherCode = countyList.get(position).getWeatherCode();
@@ -156,7 +156,7 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
             //强制列表从头开始
             citylistView.setSelection(0);
             //设置当前菜单标记
-            currentLevel = FixedConstants.LEVEL_PROVINCE;
+            currentLevel = FixedConstantsUtil.LEVEL_PROVINCE;
         } else
             Toast.makeText(thisContext, "未查询到当前省份", Toast.LENGTH_SHORT).show();
     }
@@ -173,7 +173,7 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
             //强制刷新列表
             arrayAdapter.notifyDataSetChanged();
             citylistView.setSelection(0);
-            currentLevel = FixedConstants.LEVEL_CITY;
+            currentLevel = FixedConstantsUtil.LEVEL_CITY;
         } else
             Toast.makeText(thisContext, "未查询到当前城市", Toast.LENGTH_SHORT).show();
 
@@ -191,7 +191,7 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
             //强制刷新列表
             arrayAdapter.notifyDataSetChanged();
             citylistView.setSelection(0);
-            currentLevel = FixedConstants.LEVEL_COUNTY;
+            currentLevel = FixedConstantsUtil.LEVEL_COUNTY;
         } else
             Toast.makeText(thisContext, "未查询到当前县区", Toast.LENGTH_SHORT).show();
     }
@@ -200,11 +200,11 @@ public class ChooseCityActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onBackPressed() {
         //如果当前列表级别为县区，返回市级列表
-        if (currentLevel == FixedConstants.LEVEL_COUNTY) {
+        if (currentLevel == FixedConstantsUtil.LEVEL_COUNTY) {
             allCities();
         }
         //如果当前列表级别为市级，返回省级列表
-        else if (currentLevel == FixedConstants.LEVEL_CITY) {
+        else if (currentLevel == FixedConstantsUtil.LEVEL_CITY) {
             allProvinces();
         } else {
             finish();

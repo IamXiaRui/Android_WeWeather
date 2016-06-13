@@ -11,7 +11,6 @@ import java.io.IOException;
 import xr.weweather.R;
 import xr.weweather.bean.CityBean;
 import xr.weweather.bean.CountyBean;
-import xr.weweather.bean.FixedConstants;
 import xr.weweather.bean.ProvinceBean;
 import xr.weweather.db.CityListDatabase;
 
@@ -105,7 +104,7 @@ public class AnalysisCityListUtil {
                     if (eventType == XmlPullParser.END_DOCUMENT) {
                         //清楚进度条状态
                         CURRENT_PROVINCE_COUNT = 0;
-                        return FixedConstants.XML_END;
+                        return FixedConstantsUtil.XML_END;
                     }
                 }
             } catch (NumberFormatException e) {
@@ -117,6 +116,6 @@ public class AnalysisCityListUtil {
             e.printStackTrace();
         }
         //在此返回，表示解析出错，返回解析失败标记
-        return FixedConstants.XML_ERROR;
+        return FixedConstantsUtil.XML_ERROR;
     }
 }
